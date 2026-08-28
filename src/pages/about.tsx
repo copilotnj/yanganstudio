@@ -1,17 +1,15 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { AssetImage } from '../components/asset-image';
+import { PageMeta } from '../components/page-meta';
 import { SiteFooter } from '../components/site-footer';
-import { sitePath } from '../lib/site';
 
-export const metadata: Metadata = {
-  title: '關於揚安',
-  description: '從物理老師到攝影創作者，認識台中攝影師揚安。',
-};
-
-export default function AboutPage() {
+export function AboutPage() {
   return (
     <main>
+      <PageMeta
+        title="關於揚安"
+        description="從物理老師到攝影創作者，認識台中攝影師揚安。"
+      />
       <section className="about-hero section-pad">
         <div>
           <p className="kicker">ABOUT YANG AN</p>
@@ -50,7 +48,7 @@ export default function AboutPage() {
           <p className="kicker">YOUR STORY, HONESTLY TOLD</p>
           <h2>每個故事都值得被記錄，而我想為你留下這一刻。</h2>
           <p>不管是關係中的某一天、人生的轉折點，還是你此刻的樣子，都值得被真誠地看見、被好好記住。</p>
-          <Link className="button button-solid" href={sitePath('/contact/')}>預約拍攝 <span>↗</span></Link>
+          <Link className="button button-solid" to="/contact/">預約拍攝 <span>↗</span></Link>
         </div>
       </section>
 

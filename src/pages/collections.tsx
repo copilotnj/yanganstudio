@@ -1,11 +1,6 @@
-import type { Metadata } from 'next';
 import { AssetImage } from '../components/asset-image';
+import { PageMeta } from '../components/page-meta';
 import { SiteFooter } from '../components/site-footer';
-
-export const metadata: Metadata = {
-  title: '作品集',
-  description: '揚安的人像、體態、伴侶、婚禮與生活紀實攝影作品。',
-};
 
 const projects = [
   ['portfolio-yoga-water.webp', '瑜珈攝影｜水石間的身體雕塑', '個人寫真 · 體態紀錄', '01'],
@@ -18,9 +13,13 @@ const projects = [
   ['portfolio-retro.webp', '舊時光裡的青春記憶', '南投 · 中興新村', '08'],
 ];
 
-export default function CollectionsPage() {
+export function CollectionsPage() {
   return (
     <main>
+      <PageMeta
+        title="作品集"
+        description="揚安的人像、體態、伴侶、婚禮與生活紀實攝影作品。"
+      />
       <section className="page-hero image-page-hero">
         <div>
           <p className="kicker">SELECTED STORIES · 2022—2026</p>

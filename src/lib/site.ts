@@ -16,8 +16,10 @@ export const socialLinks = [
 ];
 
 export function sitePath(path: string) {
-  const base = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-  return `${base}${path}`;
+  const base = import.meta.env.BASE_URL || '/';
+  const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${cleanBase}${cleanPath}`;
 }
 
 export function imageUrl(name: string) {

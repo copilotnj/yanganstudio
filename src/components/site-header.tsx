@@ -1,7 +1,5 @@
-'use client';
-
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { imageUrl, navItems, sitePath, socialLinks } from '../lib/site';
 import { SocialIcon } from './social-icon';
 
@@ -33,21 +31,25 @@ export function SiteHeader() {
         <span className="hamburger" aria-hidden="true"><i /><i /><i /></span>
       </button>
 
-      <Link className="brand" href={sitePath('/')} onClick={() => setOpen(false)}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+      <Link className="brand" to="/" onClick={() => setOpen(false)}>
         <img src={imageUrl('logo-colored.png')} alt="揚安在這｜人像攝影與創作基地" />
       </Link>
 
       <nav id="primary-navigation" className={open ? 'nav-panel is-open' : 'nav-panel'} aria-label="主要導覽">
-        <Link className="drawer-brand" href={sitePath('/')} onClick={() => setOpen(false)}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+        <Link className="drawer-brand" to="/" onClick={() => setOpen(false)}>
           <img src={imageUrl('logo-colored.png')} alt="揚安在這｜人像攝影與創作基地" />
         </Link>
         <span className="drawer-rule" aria-hidden="true" />
         <div className="nav-actions">
           <div className="nav-socials">
             {socialLinks.map((item) => (
-              <a key={item.label} href={item.href.startsWith('/') ? sitePath(item.href) : item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noreferrer' : undefined} aria-label={item.label}>
+              <a
+                key={item.label}
+                href={item.href.startsWith('/') ? sitePath(item.href) : item.href}
+                target={item.href.startsWith('http') ? '_blank' : undefined}
+                rel={item.href.startsWith('http') ? 'noreferrer' : undefined}
+                aria-label={item.label}
+              >
                 <SocialIcon label={item.label} />
               </a>
             ))}
@@ -55,7 +57,7 @@ export function SiteHeader() {
         </div>
         <div className="nav-primary">
           {navItems.map((item) => (
-            <Link key={item.href} href={sitePath(item.href)} onClick={() => setOpen(false)}>
+            <Link key={item.href} to={item.href} onClick={() => setOpen(false)}>
               {item.label}
             </Link>
           ))}

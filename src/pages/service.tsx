@@ -1,13 +1,7 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { AssetImage } from '../components/asset-image';
+import { PageMeta } from '../components/page-meta';
 import { SiteFooter } from '../components/site-footer';
-import { sitePath } from '../lib/site';
-
-export const metadata: Metadata = {
-  title: '攝影服務',
-  description: '人像寫真、同志婚禮、家庭紀實與品牌影音服務。',
-};
 
 const serviceTypes = [
   {
@@ -38,9 +32,13 @@ const faqs = [
   ['照片會全給嗎？', '每個方案的成品數量不同，會交付經過色調與細節整理的高畫質檔案，洽詢時會提供完整規格。'],
 ];
 
-export default function ServicePage() {
+export function ServicePage() {
   return (
     <main>
+      <PageMeta
+        title="攝影服務"
+        description="人像寫真、同志婚禮、家庭紀實與品牌影音服務。"
+      />
       <section className="page-hero service-page-hero">
         <p className="kicker">SERVICES · PHOTOGRAPHY & FILM</p>
         <h1>每個階段的你，<br />都值得一張好好記錄的照片。</h1>
@@ -55,7 +53,7 @@ export default function ServicePage() {
               <small>{service.number}</small>
               <h2>{service.title}</h2>
               <p>{service.text}</p>
-              <Link className="text-link" href={sitePath('/contact/')}>詢問這項服務 <span>→</span></Link>
+              <Link className="text-link" to="/contact/">詢問這項服務 <span>→</span></Link>
             </div>
           </article>
         ))}

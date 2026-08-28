@@ -1,11 +1,6 @@
-import type { Metadata } from 'next';
 import { AssetImage } from '../components/asset-image';
+import { PageMeta } from '../components/page-meta';
 import { SiteFooter } from '../components/site-footer';
-
-export const metadata: Metadata = {
-  title: '攝影專欄',
-  description: '攝影觀念、拍攝技巧、光影運用與器材分享。',
-};
 
 const posts = [
   ['blog-iphone-pet.webp', '拍攝實戰', '2026.08.25', 'iPhone 拍寵物的 6 個技巧', '蹲低、2 倍鏡、連拍與曝光補償，不用買相機也能把毛孩拍得更好。'],
@@ -16,9 +11,13 @@ const posts = [
   ['blog-blurry-photos.webp', '拍攝實戰', '2026.05.08', '照片不清楚，不一定是手震', '對焦、快門、景深與空氣感，找出模糊照片背後真正的原因。'],
 ];
 
-export default function BlogPage() {
+export function BlogPage() {
   return (
     <main>
+      <PageMeta
+        title="攝影專欄"
+        description="攝影觀念、拍攝技巧、光影運用與器材分享。"
+      />
       <section className="page-hero journal-hero">
         <p className="kicker">JOURNAL · PHOTOGRAPHY & LIFE</p>
         <h1>攝影專欄</h1>

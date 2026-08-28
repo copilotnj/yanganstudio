@@ -1,7 +1,8 @@
-import Link from 'next/link';
-import { AssetImage } from './components/asset-image';
-import { SiteFooter } from './components/site-footer';
-import { imageUrl, sitePath } from './lib/site';
+import { Link } from 'react-router-dom';
+import { AssetImage } from '../components/asset-image';
+import { PageMeta } from '../components/page-meta';
+import { SiteFooter } from '../components/site-footer';
+import { imageUrl } from '../lib/site';
 
 const services = [
   {
@@ -30,9 +31,13 @@ const services = [
   },
 ];
 
-export default function Home() {
+export function HomePage() {
   return (
     <main>
+      <PageMeta
+        title="每個人，都值得被真實地看見"
+        description="為 LGBTQ+ 族群與每一個走自己路的人，拍下溫柔的影像。台中人像、同志婚禮、家庭紀實與品牌影像。"
+      />
       <section className="home-hero">
         <div className="home-hero-copy">
           <p className="kicker">PORTRAIT · LOVE · LIFE</p>
@@ -42,8 +47,8 @@ export default function Home() {
             不用變得更好，現在的你，就值得被記錄下來。
           </p>
           <div className="button-row">
-            <Link className="button button-solid" href={sitePath('/collections/')}>看看作品</Link>
-            <Link className="button button-light" href={sitePath('/about/')}>認識揚安</Link>
+            <Link className="button button-solid" to="/collections/">看看作品</Link>
+            <Link className="button button-light" to="/about/">認識揚安</Link>
           </div>
         </div>
         <div className="home-hero-image">
@@ -73,7 +78,7 @@ export default function Home() {
         </header>
         <div className="service-cards">
           {services.map((service) => (
-            <Link className="service-card" href={sitePath(service.href)} key={service.number}>
+            <Link className="service-card" to={service.href} key={service.number}>
               <div className="service-image-wrap">
                 <AssetImage name={service.image} alt={service.alt} />
                 <span className="image-arrow">↗</span>
@@ -142,7 +147,7 @@ export default function Home() {
           <p className="kicker">ABOUT YANG AN</p>
           <h2>從教室走進鏡頭，<br />一路走進創作人生。</h2>
           <p>身為一位同志創作者，我想拍下的不只是影像，更是每個人獨特的生命片段。從櫃子裡到陽光下，我學會了用鏡頭看見更多可能。</p>
-          <Link className="text-link" href={sitePath('/about/')}>進一步認識我 <span>→</span></Link>
+          <Link className="text-link" to="/about/">進一步認識我 <span>→</span></Link>
         </div>
       </section>
 
@@ -151,7 +156,7 @@ export default function Home() {
           <p className="kicker">A LETTER EVERY WEEK</p>
           <h2>訂閱揚安的<br />影像週記</h2>
           <p>每週一封信，關於影像、創作，也關於生活。</p>
-          <Link className="button button-solid" href={sitePath('/newsletter/')}>免費訂閱 <span>↗</span></Link>
+          <Link className="button button-solid" to="/newsletter/">免費訂閱 <span>↗</span></Link>
         </div>
       </section>
 

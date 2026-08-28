@@ -1,16 +1,15 @@
-import type { Metadata } from 'next';
 import { AssetImage } from '../components/asset-image';
 import { NewsletterForm } from '../components/newsletter-form';
+import { PageMeta } from '../components/page-meta';
 import { SiteFooter } from '../components/site-footer';
 
-export const metadata: Metadata = {
-  title: '揚安的影像週記',
-  description: '一週一封，寫下影像裡的片段、拍攝技巧與生活心情。',
-};
-
-export default function NewsletterPage() {
+export function NewsletterPage() {
   return (
     <main>
+      <PageMeta
+        title="揚安的影像週記"
+        description="一週一封，寫下影像裡的片段、拍攝技巧與生活心情。"
+      />
       <section className="newsletter-page">
         <div className="newsletter-page-copy">
           <p className="kicker">A WEEKLY LETTER ABOUT IMAGES & LIFE</p>

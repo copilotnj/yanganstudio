@@ -1,61 +1,76 @@
-import { sites } from '@openai/sites-vite-plugin';
 import tailwindcss from '@tailwindcss/postcss';
-import vinext from 'vinext';
-import { defineConfig } from 'vite';
-import hostingConfig from './.openai/hosting.json';
+import react from '@vitejs/plugin-react';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { defineConfig, type Plugin } from 'vite';
 
-const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
-  '00000000-0000-4000-8000-000000000000';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const { d1, r2 } = hostingConfig;
-
-// macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
-const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === 'seatbelt';
-
-const localBindingConfig = {
-  main: './worker-entry.ts',
-  compatibility_flags: ['nodejs_compat'],
-  d1_databases: d1
-    ? [
-        {
-          binding: d1,
-          database_name: 'site-creator-d1',
-          database_id: SITE_CREATOR_PLACEHOLDER_DATABASE_ID,
-        },
-      ]
-    : [],
-  r2_buckets: r2
-    ? [
-        {
-          binding: r2,
-          bucket_name: 'site-creator-r2',
-        },
-      ]
-    : [],
-};
-
-export default defineConfig(async () => {
-  // Keep Wrangler and Miniflare state project-local. These are non-secret tool
-  // settings; application environment belongs in ignored `.env*` files.
-  process.env.WRANGLER_WRITE_LOGS ??= 'false';
-  process.env.WRANGLER_LOG_PATH ??= '.wrangler/logs';
-  process.env.MINIFLARE_REGISTRY_PATH ??= '.wrangler/registry';
-
-  // Wrangler snapshots its log path while the Cloudflare plugin is imported.
-  const { cloudflare } = await import('@cloudflare/vite-plugin');
+function mediaPlugin(): Plugin {
+  const sourceDir = path.resolve(__dirname, 'source-images');
+  const mimeTypes: Record<string, string> = {
+    '.webp': 'image/webp',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.svg': 'image/svg+xml',
+    '.avif': 'image/avif',
+    '.ico': 'image/x-icon',
+  };
 
   return {
-    css: { postcss: { plugins: [tailwindcss()] } },
-    server: isCodexSeatbeltSandbox
-      ? { watch: { useFsEvents: false, usePolling: true } }
-      : undefined,
-    plugins: [
-      vinext(),
-      sites(),
-      cloudflare({
-        viteEnvironment: { name: 'rsc', childEnvironments: ['ssr'] },
-        config: localBindingConfig,
-      }),
-    ],
+    name: 'media-plugin',
+    configureServer(server) {
+      server.middlewares.use('/media', (req, res, next) => {
+        const relativePath = decodeURIComponent(req.url || '').replace(/^\//, '');
+        const filePath = path.join(sourceDir, relativePath);
+
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+          const ext = path.extname(filePath).toLowerCase();
+          res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream');
+          res.setHeader('Cache-Control', 'public, max-age=3600');
+          fs.createReadStream(filePath).pipe(res);
+          return;
+        }
+        next();
+      });
+    },
+    closeBundle() {
+      const distDir = path.resolve(__dirname, 'dist');
+      const distMediaDir = path.join(distDir, 'media');
+
+      if (fs.existsSync(sourceDir) && fs.existsSync(distDir)) {
+        fs.mkdirSync(distMediaDir, { recursive: true });
+        fs.cpSync(sourceDir, distMediaDir, { recursive: true });
+      }
+
+      // Generate 404.html for GitHub Pages / static host SPA fallback
+      const indexPath = path.join(distDir, 'index.html');
+      const notFoundPath = path.join(distDir, '404.html');
+      if (fs.existsSync(indexPath) && !fs.existsSync(notFoundPath)) {
+        fs.copyFileSync(indexPath, notFoundPath);
+      }
+    },
   };
+}
+
+export default defineConfig({
+  base: process.env.PAGES_BASE_PATH || '/',
+  plugins: [
+    react(),
+    mediaPlugin(),
+  ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  css: {
+    postcss: {
+      plugins: [tailwindcss()],
+    },
+  },
 });
+

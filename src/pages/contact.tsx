@@ -1,15 +1,14 @@
-import type { Metadata } from 'next';
 import { ContactForm } from '../components/contact-form';
+import { PageMeta } from '../components/page-meta';
 import { SiteFooter } from '../components/site-footer';
 
-export const metadata: Metadata = {
-  title: '聯絡揚安',
-  description: '預約人像、婚禮、家庭或品牌影像拍攝。',
-};
-
-export default function ContactPage() {
+export function ContactPage() {
   return (
     <main>
+      <PageMeta
+        title="聯絡揚安"
+        description="預約人像、婚禮、家庭或品牌影像拍攝。"
+      />
       <section className="contact-page section-pad">
         <header>
           <p className="kicker">LET’S START A CONVERSATION</p>

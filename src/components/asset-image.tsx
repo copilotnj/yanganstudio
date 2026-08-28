@@ -9,8 +9,6 @@ type AssetImageProps = {
 
 export function AssetImage({ name, alt, className, eager = false }: AssetImageProps) {
   return (
-    // Images resolve to R2 through the Worker, or to copied static files on GitHub Pages.
-    // eslint-disable-next-line @next/next/no-img-element
     <img
       className={className}
       src={imageUrl(name)}
